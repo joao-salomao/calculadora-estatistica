@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Calculadora de Medidas Descritivas
+    </title>
+    <style>
+        .main-div {
+            margin: auto;
+            max-width: 500px;
+            padding: 20px;
+            border: 2px solid black;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #6b6b6b;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            border-right: solid 1px white;
+        }
+
+        li a:hover {
+            background-color: #111;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-div">
+        <div>
+            <ul style="background-color: darkgoldenrod">
+                <li><a onclick="toggleItemNavBarColor(this)" class="item-nav-bar" href="#home">Calculadora</a></li>
+                <li><a onclick="toggleItemNavBarColor(this)" class="item-nav-bar" href="#about">Sobre</a></li>
+            </ul>
+        </div>
+        <div>
+            <p>
+                <span>
+                    Média:
+                </span>
+                <span id="media"></span>
+            </p>
+            <p>
+                <span>
+                    Amplitude:
+                </span>
+                <span id="amplitude"></span>
+            </p>
+            <p>
+                <span>
+                    Variança:
+                </span>
+                <span id="varianca"></span>
+            </p>
+            <p>
+                <span>
+                    Desvio Padrão:
+                </span>
+                <span id="desvioPadrao"></span>
+            </p>
+            <p>
+                <span>
+                    Coeficiente de Variação:
+                </span>
+                <span id="coeficienteDeVariacao"></span>
+            </p>
+        </div>
+        <label for="values">Valores: </label><br>
+        <textarea id="values" rows="4" cols="50"
+            placeholder="Digite aqui os valores que devem ser considerados separados por vírgula"></textarea><br>
+        <input onclick="calculate()" id="calculate-button" type="button" value="Calcular">
+    </div>
+</body>
+<script>
+    const toggleItemNavBarColor = ref => {
+        const items = document.getElementsByClassName("item-nav-bar")
+        for (const item of items) {
+            item.style['background-color'] = null
+        }
+        ref.style['background-color'] = "#111"
+    }
+
+
+    const amplitude = (arr) => {
+        arr.sort((a, b) => a - b);
+        const max = arr[arr.length - 1];
+        const min = arr[0];
+        return max - min;
+    }
+
+    const media = arr => {
+        const total = arr.reduce((acc, v) => acc + v, 0);
+        return total / arr.length
+    }
+
+    const varianca = arr => {
+        const mean = media(arr)
+        return arr.reduce((acc, value) => acc + Math.pow(value - mean, 2), 0) / arr.length
+    }
+
+    const desvioPadrao = arr => {
+        const s2 = varianca(arr)
+        return Math.sqrt(s2)
+    }
+
+    const coeficienteDeVariacao = arr => (desvioPadrao(arr) / media(arr)) * 100
+
+    const calculate = () => {
+        let arr = document.getElementById("values").value
+        arr = arr.split(',').map(str => parseFloat(str))
+
+        document.getElementById("media").innerHTML = media(arr)
+        document.getElementById("amplitude").innerHTML = amplitude(arr)
+        document.getElementById("varianca").innerHTML = varianca(arr)
+        document.getElementById("desvioPadrao").innerHTML = desvioPadrao(arr)
+        document.getElementById("coeficienteDeVariacao").innerHTML = `${coeficienteDeVariacao(arr)} %`
+    }
+</script>
+
+</html>
