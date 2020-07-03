@@ -1,0 +1,12 @@
+.variables-box {
+    float: left;
+    text-align: center;
+    width: 50%;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.variable-label {
+    font-weight: bold;
+    font-size: 17px;
+}
